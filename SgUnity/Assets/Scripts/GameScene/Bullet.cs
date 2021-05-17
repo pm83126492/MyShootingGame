@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public Rigidbody2D rigidbody2;
+    public float BulletSpeed;
+
     void Start()
     {
-        StartCoroutine("test");
+        StartCoroutine("Hide");
     }
 
     void Update()
     {
-        transform.Translate(transform.up * 10 * Time.deltaTime);
+        transform.Translate(Vector3.up * Time.deltaTime * BulletSpeed);
     }
 
-    IEnumerator test()
+    //Hide Bullet
+    IEnumerator Hide()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(5f);
         gameObject.SetActive(false);
     }
 }

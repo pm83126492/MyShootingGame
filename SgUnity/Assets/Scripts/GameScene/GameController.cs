@@ -8,7 +8,9 @@ public class GameController : MonoBehaviour
     public Transform[] EnemyPoint;
 
     bool isAppearing;
-    public enum EnemyAppearState
+
+    int RandomLV1Number;
+    public enum EnemyState
     {
         NONE,
         LV1,
@@ -16,11 +18,11 @@ public class GameController : MonoBehaviour
         LV3,
     }
 
-    public EnemyAppearState enemyAppearState;
+    public EnemyState enemyAppearState;
     void Start()
     {
-        enemyAppearState = EnemyAppearState.NONE;
-        Invoke("StartGame", 3f);
+        enemyAppearState = EnemyState.NONE;
+        Invoke("StartGame", 1f);//StartGame in 3 seconds
     }
 
     void Update()
@@ -28,11 +30,12 @@ public class GameController : MonoBehaviour
         EnemyAppear();
     }
 
+    //SpawnEnemy
     void EnemyAppear()
     {
         switch (enemyAppearState)
         {
-            case EnemyAppearState.LV1:
+            case EnemyState.LV1:
                 if (!isAppearing)
                 {
                     StartCoroutine(DelayAppear());
@@ -44,19 +47,16 @@ public class GameController : MonoBehaviour
 
     void StartGame()
     {
-        enemyAppearState = EnemyAppearState.LV1;
+        enemyAppearState = EnemyState.LV1;
     }
 
+    //EnemyDelayAppear
     IEnumerator DelayAppear()
     {
         for (int i = 0; i < EnemyPoint.Length; i++)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.1f);
             objectsPool.SpawnFromPool("Enemy01", EnemyPoint[i].position, EnemyPoint[i].rotation);
-            if (EnemyPoint.Length == 5)
-            {
-                enemyAppearState = EnemyAppearState.LV2;
-            }
         }
     }
 }

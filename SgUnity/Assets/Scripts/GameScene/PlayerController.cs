@@ -1,18 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public ObjectsPool objectPool;//objectPoolScript
     public Transform FirePoint;
+    public Slider HPSilder;
 
     bool CanNextFire;//NextFire Is OK?
 
     public float PlayerMoveSpeed;
+    public int CurrentHP;//PlayerHP
 
     void Start()
     {
+        CurrentHP = 100;
         //FirePoint = GetComponentInChildren<Transform>();
     }
 
@@ -65,5 +69,24 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.05f);
         CanNextFire = false;
+    }
+
+    //Player Damage
+    public void TakeDamage(int DamageInt)
+    {
+        CurrentHP -= DamageInt;
+        if (CurrentHP <= 0)
+        {
+            CurrentHP = 0;
+        }
+        HPSilder.value = CurrentHP;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("EnemyBullet"))
+        {
+            TakeDamage(1);
+        }
     }
 }
