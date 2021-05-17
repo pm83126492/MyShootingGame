@@ -8,11 +8,14 @@ public class PlayerController : MonoBehaviour
     public ObjectsPool objectPool;//objectPoolScript
     public Transform FirePoint;
     public Slider HPSilder;
+    public Text ScoreText;
 
     bool CanNextFire;//NextFire Is OK?
 
     public float PlayerMoveSpeed;
     public int CurrentHP;//PlayerHP
+
+    public static int Score;
 
     void Start()
     {
@@ -32,6 +35,9 @@ public class PlayerController : MonoBehaviour
             CanNextFire = true;
             StartCoroutine(FireTime());
         }
+
+        //PlayerAddScore
+        ScoreText.text = "Score:" + Score;
     }
 
     //PlayerMove

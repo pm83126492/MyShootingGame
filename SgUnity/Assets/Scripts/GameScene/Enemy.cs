@@ -35,6 +35,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Bullet"))
         {
+            PlayerController.Score += 1;
             gameObject.SetActive(false);
             CancelInvoke("EnemyFire");
         }
