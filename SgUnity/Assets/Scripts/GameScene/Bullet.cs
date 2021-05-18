@@ -5,10 +5,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float BulletSpeed;
-
+    public bool isEnemy;
     void Start()
     {
-        StartCoroutine("Hide");
+        //StartCoroutine("Hide");
     }
 
     void Update()
@@ -16,10 +16,11 @@ public class Bullet : MonoBehaviour
         transform.Translate(Vector3.up * Time.deltaTime * BulletSpeed);
     }
 
-    //Hide Bullet
-    IEnumerator Hide()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        yield return new WaitForSeconds(5f);
-        gameObject.SetActive(false);
+        if (other.gameObject.CompareTag("Player") && isEnemy|| other.gameObject.CompareTag("Enemy") && !isEnemy)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

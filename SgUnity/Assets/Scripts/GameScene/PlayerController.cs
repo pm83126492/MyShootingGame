@@ -67,7 +67,36 @@ public class PlayerController : MonoBehaviour
     //Shooting
     void Fire()
     {
-        objectPool.SpawnFromPool("PlayerBullet", FirePoint.position, transform.rotation);
+        ShootLevel(1);
+    }
+
+    void ShootLevel(int ShootNumber)
+    {
+        Quaternion leftQuaternoin1 = Quaternion.AngleAxis(4, Vector3.forward);
+        Quaternion rightQuaternoin1 = Quaternion.AngleAxis(-4, Vector3.forward);
+        Quaternion leftQuaternoin2 = Quaternion.AngleAxis(8, Vector3.forward);
+        Quaternion rightQuaternoin2 = Quaternion.AngleAxis(-8, Vector3.forward);
+        for (int j = 0; j < ShootNumber; j++)
+        {
+            switch (j)
+            {
+                case 0:
+                    objectPool.SpawnFromPool("PlayerBullet", FirePoint.position, transform.rotation);
+                    break;
+                case 1:
+                    objectPool.SpawnFromPool("PlayerBullet", FirePoint.position, leftQuaternoin1);
+                    break;
+                case 2:
+                    objectPool.SpawnFromPool("PlayerBullet", FirePoint.position, rightQuaternoin1);
+                    break;
+                case 3:
+                    objectPool.SpawnFromPool("PlayerBullet", FirePoint.position, leftQuaternoin2);
+                    break;
+                case 4:
+                    objectPool.SpawnFromPool("PlayerBullet", FirePoint.position, rightQuaternoin2);
+                    break;
+            }
+        }
     }
 
     //FireTimeReciprocal
