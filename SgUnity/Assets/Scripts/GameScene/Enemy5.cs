@@ -8,7 +8,7 @@ public class Enemy5 : EnemyParent ,IPoolObject
     protected override void Start()
     {
         base.Start();
-        //InvokeRepeating("EnemyFire", 0f, 0.2f);//EnemyShooting
+        InvokeRepeating("EnemyFire", 0f, 0.1f);//EnemyShooting
     }
 
     public void OnObjectSpawn()

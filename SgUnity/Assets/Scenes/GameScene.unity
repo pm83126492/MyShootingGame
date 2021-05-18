@@ -309,7 +309,7 @@ MonoBehaviour:
   FirePoint: {fileID: 265626534}
   HPSilder: {fileID: 568736570}
   ScoreText: {fileID: 427074889}
-  PlayerMoveSpeed: 5
+  PlayerMoveSpeed: 3
   CurrentHP: 0
 --- !u!212 &195551748
 SpriteRenderer:
@@ -390,7 +390,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.021017686, y: 0}
+  m_Offset: {x: 0.010565497, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -401,7 +401,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.7852471, y: 1.04}
+  m_Size: {x: 0.4188822, y: 1.04}
   m_EdgeRadius: 0
 --- !u!50 &195551751
 Rigidbody2D:
@@ -423,7 +423,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &242169443
 GameObject:
   m_ObjectHideFlags: 0
@@ -988,6 +988,7 @@ GameObject:
   - component: {fileID: 730547023}
   - component: {fileID: 730547022}
   - component: {fileID: 730547021}
+  - component: {fileID: 730547025}
   m_Layer: 0
   m_Name: BackGround
   m_TagString: BackGround
@@ -1073,7 +1074,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -6.300374}
+  m_Offset: {x: 0, y: -6.57199}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1084,7 +1085,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 7.5, y: 5.565647}
+  m_Size: {x: 7.5, y: 5.022415}
   m_EdgeRadius: 0
 --- !u!61 &730547022
 BoxCollider2D:
@@ -1125,7 +1126,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 7.871505}
+  m_Offset: {x: 0, y: 6.7397738}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1136,7 +1137,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 7.5, y: 2.7511234}
+  m_Size: {x: 7.5, y: 5.0145855}
   m_EdgeRadius: 0
 --- !u!61 &730547024
 BoxCollider2D:
@@ -1164,6 +1165,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.2071466, y: 18.423077}
   m_EdgeRadius: 0
+--- !u!50 &730547025
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730547018}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &790233693
 GameObject:
   m_ObjectHideFlags: 0
@@ -1296,7 +1318,7 @@ MonoBehaviour:
   - {fileID: 105107342}
   - {fileID: 2029781627}
   - {fileID: 1746802872}
-  enemyAppearState: 4
+  enemyAppearState: 0
 --- !u!4 &1146982484
 Transform:
   m_ObjectHideFlags: 0
@@ -1652,19 +1674,19 @@ MonoBehaviour:
   pools:
   - tag: PlayerBullet
     prefab: {fileID: 5036939391620551119, guid: 3cfbd56d8d3fd5a4899d8e5d02e3ca4f, type: 3}
-    size: 100
+    size: 500
   - tag: StraightBullet
     prefab: {fileID: 3504424896307291154, guid: 490e41477a0a1ce4c8878c3cfaf3ae96, type: 3}
-    size: 1000
+    size: 500
   - tag: SectorBullet
     prefab: {fileID: 1896068715148536951, guid: adf1cb042e491dd4fa57af087d6bd16c, type: 3}
-    size: 1000
+    size: 500
   - tag: CircleBullet
     prefab: {fileID: 2134758398852819908, guid: 5311857517d4064438cceda50fe158ed, type: 3}
-    size: 1000
+    size: 500
   - tag: BurstBullet
     prefab: {fileID: 2614689726016287546, guid: 1227c60ddd2b29b45adeb9e3d49d0650, type: 3}
-    size: 1000
+    size: 500
 --- !u!4 &1922727513
 Transform:
   m_ObjectHideFlags: 0
@@ -1848,7 +1870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5458478692253647747, guid: 358ccc2547c241c469c0cead68b449d2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.4
+      value: -0.12
       objectReference: {fileID: 0}
     - target: {fileID: 5458478692253647747, guid: 358ccc2547c241c469c0cead68b449d2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1882,6 +1904,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5458478692253647757, guid: 358ccc2547c241c469c0cead68b449d2, type: 3}
+      propertyPath: RSpeed
+      value: -0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 5458478692253647758, guid: 358ccc2547c241c469c0cead68b449d2, type: 3}
       propertyPath: m_Name
       value: Enemy5(Spin)
@@ -1905,11 +1931,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5815911294989215650, guid: 4a30c1fe0383d1b42b4e182284d11b0d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5815911294989215650, guid: 4a30c1fe0383d1b42b4e182284d11b0d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5815911294989215650, guid: 4a30c1fe0383d1b42b4e182284d11b0d, type: 3}
       propertyPath: m_LocalPosition.z

@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
         MovePosition();
 
         //Shooting
-        if (Input.GetMouseButton(0) && !CanNextFire)
+        if ((Input.GetMouseButton(0)|| Input.GetKey(KeyCode.Space)) && !CanNextFire)
         {
             Fire();
             CanNextFire = true;
@@ -67,7 +67,26 @@ public class PlayerController : MonoBehaviour
     //Shooting
     void Fire()
     {
-        ShootLevel(1);
+        if (Score < 100)
+        {
+            ShootLevel(1);
+        }
+        else if (Score>=100&&Score < 200)
+        {
+            ShootLevel(2);
+        }
+        else if (Score >= 200 && Score < 300)
+        {
+            ShootLevel(3);
+        }
+        else if (Score >= 300 && Score <400)
+        {
+            ShootLevel(4);
+        }
+        else if (Score >= 400)
+        {
+            ShootLevel(5);
+        }
     }
 
     void ShootLevel(int ShootNumber)
@@ -102,7 +121,7 @@ public class PlayerController : MonoBehaviour
     //FireTimeReciprocal
     IEnumerator FireTime()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.1f);
         CanNextFire = false;
     }
 

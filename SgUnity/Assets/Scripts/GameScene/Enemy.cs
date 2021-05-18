@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : EnemyParent
+public class Enemy : EnemyParent ,IPoolObject
 {
     int FireTime;
+
+    bool isMoveing;
 
     protected override void Start()
     {
@@ -12,16 +14,30 @@ public class Enemy : EnemyParent
         InvokeRepeating("EnemyFire", 1f, 0.1f);//EnemyShooting
     }
 
+    public void OnObjectSpawn()
+    {
+        InvokeRepeating("EnemyFire", 1f, 0.1f);//EnemyShooting
+        isMoveing = false;
+        FireTime = 0;
+    }
+
     void Update()
     {
         EnemyMove();//EnemyMoving
 
+        if (isMoveing)
+        {
+            Move(2);
+        }
+
         //Stop Shooting
         if (FireTime > 10)
         {
-            StartCoroutine(ReloadFire());
             CancelInvoke("EnemyFire");
+            StartCoroutine(ReloadFire());
             FireTime = 0;
+            isMoveing = true;
+            transform.rotation = Quaternion.Euler(0.0f, 0.0f, Random.Range(90, 271));
         }
     }
 
@@ -47,8 +63,8 @@ public class Enemy : EnemyParent
     //StraightShooting
     void EnemyFire()
     {
-        Quaternion zeroQuaternoin = Quaternion.AngleAxis(0, Vector3.forward);
-        Shoot("StraightBullet", FirePoint[0].position, FirePoint[0].rotation);
+        Quaternion RandomQuaternoin = Quaternion.AngleAxis(transform.localEulerAngles.z+Random.Range(180, 225), Vector3.forward);
+        Shoot("StraightBullet", FirePoint[0].position, RandomQuaternoin);
         FireTime += 1;
     }
 
@@ -56,9 +72,7 @@ public class Enemy : EnemyParent
     IEnumerator ReloadFire()
     {
         yield return new WaitForSeconds(1f);
-        Vector3 PlayerAndEnemyDifference = target.transform.position - transform.position;
-        float rotationZ = Mathf.Atan2(PlayerAndEnemyDifference.y, PlayerAndEnemyDifference.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationZ - 90);
+        isMoveing = false;
         InvokeRepeating("EnemyFire", 0f, 0.1f);
     }
 }

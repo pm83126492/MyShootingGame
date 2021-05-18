@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Enemy2 : EnemyParent , IPoolObject
 {
+
+    protected override void Start()
+    {
+        base.Start();
+        InvokeRepeating("EnemyFire", 1f, 0.3f);//EnemyShooting
+    }
     public void OnObjectSpawn()
     {
         InvokeRepeating("EnemyFire", 0f, 0.3f);//EnemyShooting
@@ -19,7 +25,7 @@ public class Enemy2 : EnemyParent , IPoolObject
 
     void EnemyMove()
     {
-        Move(2); 
+        Move(1); 
     }
 
     //SectorShooting

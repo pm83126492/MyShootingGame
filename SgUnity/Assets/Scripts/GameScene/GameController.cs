@@ -9,12 +9,11 @@ public class GameController : MonoBehaviour
 
     bool isAppearing;
 
-    int RandomLV1Number;
+    float GameTime;
     public enum EnemyState
     {
         NONE,
-        LV1_1,
-        LV1_2,
+        LV1,
         LV2,
         LV3,
         LV4,
@@ -31,6 +30,20 @@ public class GameController : MonoBehaviour
     void Update()
     {
         EnemyAppear();
+        if (GameTime == 5)
+        {
+            isAppearing = false;
+            GameTime += 1;
+            StopAllCoroutines();
+            enemyAppearState = EnemyState.LV2;
+        }
+        else if(GameTime == 30)
+        {
+            isAppearing = false;
+            GameTime += 1;
+            StopAllCoroutines();
+            enemyAppearState = EnemyState.LV3;
+        }
     }
 
     //SpawnEnemy
@@ -38,24 +51,17 @@ public class GameController : MonoBehaviour
     {
         switch (enemyAppearState)
         {
-            case EnemyState.LV1_1:
+            case EnemyState.LV1:
                 if (!isAppearing)
                 {
-                    StartCoroutine(DelayAppear("Enemy01",4,0.1f));
-                    isAppearing = true;
-                }
-                break;
-            case EnemyState.LV1_2:
-                if (!isAppearing)
-                {
-                    StartCoroutine(DelayAppear("Enemy01",4,0.1f));
+                    StartCoroutine(DelayAppear2(false));
                     isAppearing = true;
                 }
                 break;
             case EnemyState.LV2:
                 if (!isAppearing)
                 {
-                    StartCoroutine(DelayAppear("Enemy01", 4, 0.1f));
+                    StartCoroutine(DelayAppear2(false));
                     StartCoroutine(DelayAppear("Enemy04", 50,0.5f));
                     isAppearing = true;
                 }
@@ -63,13 +69,13 @@ public class GameController : MonoBehaviour
             case EnemyState.LV3:
                 if (!isAppearing)
                 {
-                    StartCoroutine(DelayAppear("Enemy01", 4, 0.1f));
-                    StartCoroutine(DelayAppear("Enemy04", 50, 0.5f));
-                    StartCoroutine(DelayAppear("Enemy02", 10, 3f));
+                    StartCoroutine(DelayAppear2(false));
+                    StartCoroutine(DelayAppear("Enemy04", 1000, 0.5f));
+                    StartCoroutine(DelayAppear("Enemy02", 1000, 1.5f));
                     isAppearing = true;
                 }
                 break;
-            case EnemyState.LV4:
+            /*case EnemyState.LV4:
                 if (!isAppearing)
                 {
                     StartCoroutine(DelayAppear("Enemy03", 10, 2f));
@@ -82,13 +88,13 @@ public class GameController : MonoBehaviour
                     StartCoroutine(DelayAppear("Enemy05", 10, 2f));
                     isAppearing = true;
                 }
-                break;
+                break;*/
         }
     }
 
     void StartGame()
     {
-        enemyAppearState = EnemyState.LV3;
+        enemyAppearState = EnemyState.LV1;
     }
 
     //EnemyDelayAppear
@@ -98,16 +104,39 @@ public class GameController : MonoBehaviour
         {
             yield return new WaitForSeconds(DelayTime);
             objectsPool.SpawnFromPool(EnemyTag, EnemyPoint[Random.Range(0,5)].position, EnemyPoint[Random.Range(0, 5)].rotation);
+            GameTime += 1;
         }
     }
 
     //EnemyDelayAppear_LV1_2
-    IEnumerator DelayAppear2()
+    IEnumerator DelayAppear2(bool isInVerse)
     {
-        for (int i = EnemyPoint.Length-1; i >= 0; i--)
+        yield return new WaitForSeconds(1f);
+        if (!isInVerse)
         {
-            yield return new WaitForSeconds(0.1f);
-            objectsPool.SpawnFromPool("Enemy01", EnemyPoint[i].position, EnemyPoint[i].rotation);
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForSeconds(0.2f);
+                objectsPool.SpawnFromPool("Enemy01", EnemyPoint[i].position, EnemyPoint[i].rotation);
+                if (i == 4)
+                {
+                    GameTime += 1;
+                    StartCoroutine(DelayAppear2(true));
+                }
+            }
+        }
+        else
+        {
+            for (int i = 4; i >= 0; i--)
+            {
+                yield return new WaitForSeconds(0.2f);
+                objectsPool.SpawnFromPool("Enemy01", EnemyPoint[i].position, EnemyPoint[i].rotation);
+                if (i == 0)
+                {
+                    GameTime += 1;
+                    StartCoroutine(DelayAppear2(false));
+                }
+            }
         }
     }
 }
