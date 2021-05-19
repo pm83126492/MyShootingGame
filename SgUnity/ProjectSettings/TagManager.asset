@@ -8,6 +8,8 @@ TagManager:
   - EnemyBullet
   - BackGround
   - Enemy
+  - ProtectingObject
+  - Bottom
   layers:
   - Default
   - TransparentFX

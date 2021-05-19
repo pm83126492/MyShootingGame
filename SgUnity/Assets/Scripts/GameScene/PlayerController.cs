@@ -9,17 +9,21 @@ public class PlayerController : MonoBehaviour
     public Transform FirePoint;
     public Slider HPSilder;
     public Text ScoreText;
+    public Text ProtectText;
+    public GameObject ProtectingMask;
 
     bool CanNextFire;//NextFire Is OK?
+    bool isProtecting;//isProtecting?
 
     public float PlayerMoveSpeed;
     public int CurrentHP;//PlayerHP
-
-    public static int Score;
+    public int ProtectingAmount;//PlayerCanProtectingAmount
+    public static int Score;//PlayerScore
 
     void Start()
     {
         CurrentHP = 100;
+        ProtectingMask = transform.GetChild(1).gameObject;
         //FirePoint = GetComponentInChildren<Transform>();
     }
 
@@ -36,8 +40,12 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(FireTime());
         }
 
+        Protecting();
+
         //PlayerAddScore
         ScoreText.text = "Score:" + Score;
+        //PlayerProtectingAmount
+        ProtectText.text = "X " + ProtectingAmount;
     }
 
     //PlayerMove
@@ -118,11 +126,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void Protecting() //ProtectingEvent
+    {
+        if(Input.GetKeyDown(KeyCode.Q)&&ProtectingAmount>0&& !isProtecting)
+        {
+            isProtecting = true;
+            ProtectingMask.SetActive(true);
+            ProtectingAmount -= 1;
+            StartCoroutine(ProtectingCoolingTime());
+        }
+    }
+
     //FireTimeReciprocal
     IEnumerator FireTime()
     {
         yield return new WaitForSeconds(0.1f);
         CanNextFire = false;
+    }
+
+    IEnumerator ProtectingCoolingTime()
+    {
+        yield return new WaitForSeconds(3f);
+        isProtecting = false;
+        ProtectingMask.SetActive(false);
     }
 
     //Player Damage
@@ -138,9 +164,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("EnemyBullet"))
+        if (other.gameObject.CompareTag("EnemyBullet")&&!isProtecting)
         {
             TakeDamage(1);
+        }
+
+        if (other.gameObject.CompareTag("ProtectingObject"))
+        {
+            ProtectingAmount += 1;
+            Destroy(other.gameObject);
         }
     }
 }

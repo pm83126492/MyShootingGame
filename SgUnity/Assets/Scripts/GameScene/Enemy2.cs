@@ -8,11 +8,11 @@ public class Enemy2 : EnemyParent , IPoolObject
     protected override void Start()
     {
         base.Start();
-        InvokeRepeating("EnemyFire", 1f, 0.3f);//EnemyShooting
+        //InvokeRepeating("EnemyFire", 1f, 0.3f);//EnemyShooting
     }
     public void OnObjectSpawn()
     {
-        InvokeRepeating("EnemyFire", 0f, 0.3f);//EnemyShooting
+        InvokeRepeating("EnemyFire", 0f, 0.5f);//EnemyShooting
     }
 
     // Update is called once per frame
@@ -25,7 +25,7 @@ public class Enemy2 : EnemyParent , IPoolObject
 
     void EnemyMove()
     {
-        Move(1); 
+        Move(MoveSpeed); 
     }
 
     //SectorShooting
@@ -36,10 +36,10 @@ public class Enemy2 : EnemyParent , IPoolObject
         transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationZ - 90);
 
         Quaternion zeroQuaternoin = Quaternion.AngleAxis(transform.localEulerAngles.z+180, Vector3.forward);
-        Quaternion leftQuaternoin1 = Quaternion.AngleAxis(transform.localEulerAngles.z+187, Vector3.forward);
-        Quaternion rightQuaternoin1 = Quaternion.AngleAxis(transform.localEulerAngles.z + 173, Vector3.forward);
-        Quaternion leftQuaternoin2 = Quaternion.AngleAxis(transform.localEulerAngles.z+195, Vector3.forward);
-        Quaternion rightQuaternoin2 = Quaternion.AngleAxis(transform.localEulerAngles.z + 165, Vector3.forward);
+        Quaternion leftQuaternoin1 = Quaternion.AngleAxis(transform.localEulerAngles.z+195, Vector3.forward);
+        Quaternion rightQuaternoin1 = Quaternion.AngleAxis(transform.localEulerAngles.z + 165, Vector3.forward);
+        Quaternion leftQuaternoin2 = Quaternion.AngleAxis(transform.localEulerAngles.z+210, Vector3.forward);
+        Quaternion rightQuaternoin2 = Quaternion.AngleAxis(transform.localEulerAngles.z + 150, Vector3.forward);
 
         for (int j = 0; j < 5; j++)
         {

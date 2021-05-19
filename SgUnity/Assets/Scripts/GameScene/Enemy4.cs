@@ -19,7 +19,7 @@ public class Enemy4 : EnemyParent , IPoolObject
     // Update is called once per frame
     void Update()
     {
-        Move(3);
+        Move(MoveSpeed);
     }
 
     //BurstShooting

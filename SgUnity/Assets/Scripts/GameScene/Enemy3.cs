@@ -7,17 +7,17 @@ public class Enemy3 : EnemyParent , IPoolObject
     protected override void Start()
     {
         base.Start();
-        InvokeRepeating("EnemyFire", 1f, 0.7f);//EnemyShooting
+        //InvokeRepeating("EnemyFire", 1f, 2f);//EnemyShooting
     }
 
     public void OnObjectSpawn()
     {
-        InvokeRepeating("EnemyFire", 1f, 0.3f);//EnemyShooting
+        InvokeRepeating("EnemyFire", 1f, 2f);//EnemyShooting
     }
 
     private void Update()
     {
-        //Move(-1);
+        Move(MoveSpeed);
     }
 
     //CircleShooting
@@ -25,12 +25,11 @@ public class Enemy3 : EnemyParent , IPoolObject
     {
         Vector3 fireDirection = transform.up;
         float rotationAngle=0;
-        for (int j = 0; j < 36; j++)
+        for (int j = 0; j < 30; j++)
         {
             Shoot("CircleBullet", FirePoint[0].position, Quaternion.AngleAxis(rotationAngle, Vector3.forward));
-            rotationAngle += 10;
+            rotationAngle += 12;
         }
-
 
     }
 }

@@ -27,6 +27,12 @@ public class EnemyParent : MonoBehaviour
             gameObject.SetActive(false);
             CancelInvoke("EnemyFire");
         }
+
+        if (other.gameObject.CompareTag("Bottom"))
+        {
+            gameObject.SetActive(false);
+            CancelInvoke("EnemyFire");
+        }
     }
 
     //EnemyShooting
@@ -36,8 +42,8 @@ public class EnemyParent : MonoBehaviour
     }
 
     //EnemyMoving
-    public virtual void Move(float MoveSpeed)
+    public virtual void Move(float moveSpeed)
     {
-        transform.Translate(Vector3.up * Time.deltaTime * MoveSpeed);
+        transform.Translate(Vector3.up * Time.deltaTime * moveSpeed);
     }
 }

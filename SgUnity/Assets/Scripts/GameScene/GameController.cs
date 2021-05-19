@@ -7,9 +7,11 @@ public class GameController : MonoBehaviour
     public ObjectsPool objectsPool;
     public Transform[] EnemyPoint;
 
-    bool isAppearing;
+    public GameObject AddProtectingObject;
 
-    float GameTime;
+    bool isAppearing;
+    bool isGetProtecting;
+    public float GameTime;
     public enum EnemyState
     {
         NONE,
@@ -18,6 +20,7 @@ public class GameController : MonoBehaviour
         LV3,
         LV4,
         LV5,
+        BOSS,
     }
 
     public EnemyState enemyAppearState;
@@ -29,21 +32,11 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        EnemyAppear();
-        if (GameTime == 5)
-        {
-            isAppearing = false;
-            GameTime += 1;
-            StopAllCoroutines();
-            enemyAppearState = EnemyState.LV2;
-        }
-        else if(GameTime == 30)
-        {
-            isAppearing = false;
-            GameTime += 1;
-            StopAllCoroutines();
-            enemyAppearState = EnemyState.LV3;
-        }
+        EnemyAppear();//SpawnEnemy
+
+        GameTimeChangeLevel();//LevelChange 1~5
+
+        ProtectingObject();//AppearProtectingObject
     }
 
     //SpawnEnemy
@@ -54,14 +47,14 @@ public class GameController : MonoBehaviour
             case EnemyState.LV1:
                 if (!isAppearing)
                 {
-                    StartCoroutine(DelayAppear2(false));
+                    StartCoroutine(DelayAppearLV1Enemy(false));
                     isAppearing = true;
                 }
                 break;
             case EnemyState.LV2:
                 if (!isAppearing)
                 {
-                    StartCoroutine(DelayAppear2(false));
+                    StartCoroutine(DelayAppearLV1Enemy(false));
                     StartCoroutine(DelayAppear("Enemy04", 50,0.5f));
                     isAppearing = true;
                 }
@@ -69,32 +62,98 @@ public class GameController : MonoBehaviour
             case EnemyState.LV3:
                 if (!isAppearing)
                 {
-                    StartCoroutine(DelayAppear2(false));
-                    StartCoroutine(DelayAppear("Enemy04", 1000, 0.5f));
-                    StartCoroutine(DelayAppear("Enemy02", 1000, 1.5f));
+                    StartCoroutine(DelayAppearLV1Enemy(false));
+                    StartCoroutine(DelayAppear("Enemy04", 100, 0.5f));
+                    StartCoroutine(DelayAppear("Enemy02", 100, 1f));
                     isAppearing = true;
                 }
                 break;
-            /*case EnemyState.LV4:
+            case EnemyState.LV4:
                 if (!isAppearing)
                 {
-                    StartCoroutine(DelayAppear("Enemy03", 10, 2f));
+                    StartCoroutine(DelayAppearLV1Enemy(false));
+                    StartCoroutine(DelayAppear("Enemy04", 100, 0.5f));
+                    StartCoroutine(DelayAppear("Enemy02", 100, 1f));
+                    StartCoroutine(DelayAppear("Enemy03", 100, 2f));
                     isAppearing = true;
                 }
                 break;
             case EnemyState.LV5:
                 if (!isAppearing)
                 {
-                    StartCoroutine(DelayAppear("Enemy05", 10, 2f));
+                    StartCoroutine(DelayAppearLV1Enemy(false));
+                    StartCoroutine(DelayAppear("Enemy04", 100, 0.5f));
+                    StartCoroutine(DelayAppear("Enemy02", 100, 1f));
+                    StartCoroutine(DelayAppear("Enemy03", 100, 2f));
+                    StartCoroutine(DelayAppear("Enemy05", 100, 1.5f));
                     isAppearing = true;
                 }
-                break;*/
+                break;
+
         }
     }
 
     void StartGame()
     {
         enemyAppearState = EnemyState.LV1;
+    }
+
+    //LevelChange 1~5
+    void GameTimeChangeLevel()
+    {
+        GameTime += Time.deltaTime;
+        if (Mathf.Floor(GameTime) == 10)
+        {
+            ChangeLevel();
+            enemyAppearState = EnemyState.LV2;
+        }
+        else if (Mathf.Floor(GameTime) == 30)
+        {
+            ChangeLevel();
+            enemyAppearState = EnemyState.LV3;
+        }
+        else if (Mathf.Floor(GameTime) == 50)
+        {
+            ChangeLevel();
+            enemyAppearState = EnemyState.LV4;
+        }
+        else if (Mathf.Floor(GameTime) == 70)
+        {
+            ChangeLevel();
+            enemyAppearState = EnemyState.LV5;
+        }
+    }
+
+    void ChangeLevel()
+    {
+        isAppearing = false;
+        StopAllCoroutines();
+    }
+
+    //AppearProtectingObject
+    void ProtectingObject()
+    {
+        if(Mathf.Floor(GameTime) % 15 == 0&& Mathf.Floor(GameTime) !=0&& !isGetProtecting)
+        {
+            Instantiate(AddProtectingObject, EnemyPoint[Random.Range(0, 5)].position, EnemyPoint[Random.Range(0, 5)].rotation);
+            isGetProtecting = true;
+        }
+        if (Mathf.Floor(GameTime) %2 != 0)
+        {
+            isGetProtecting = false;
+        }
+        
+        /*
+        if (PlayerController.Score % 50==0&& PlayerController.Score != 0&& !isGetProtecting)
+        {
+            Instantiate(AddProtectingObject, EnemyPoint[Random.Range(0, 5)].position, EnemyPoint[Random.Range(0, 5)].rotation);
+            isGetProtecting = true;
+        }
+
+        if (PlayerController.Score % 2 != 0)
+        {
+            isGetProtecting = false;
+        }*/
     }
 
     //EnemyDelayAppear
@@ -104,14 +163,13 @@ public class GameController : MonoBehaviour
         {
             yield return new WaitForSeconds(DelayTime);
             objectsPool.SpawnFromPool(EnemyTag, EnemyPoint[Random.Range(0,5)].position, EnemyPoint[Random.Range(0, 5)].rotation);
-            GameTime += 1;
         }
     }
 
     //EnemyDelayAppear_LV1_2
-    IEnumerator DelayAppear2(bool isInVerse)
+    IEnumerator DelayAppearLV1Enemy(bool isInVerse)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         if (!isInVerse)
         {
             for (int i = 0; i < 5; i++)
@@ -120,8 +178,7 @@ public class GameController : MonoBehaviour
                 objectsPool.SpawnFromPool("Enemy01", EnemyPoint[i].position, EnemyPoint[i].rotation);
                 if (i == 4)
                 {
-                    GameTime += 1;
-                    StartCoroutine(DelayAppear2(true));
+                    StartCoroutine(DelayAppearLV1Enemy(true));
                 }
             }
         }
@@ -133,8 +190,7 @@ public class GameController : MonoBehaviour
                 objectsPool.SpawnFromPool("Enemy01", EnemyPoint[i].position, EnemyPoint[i].rotation);
                 if (i == 0)
                 {
-                    GameTime += 1;
-                    StartCoroutine(DelayAppear2(false));
+                    StartCoroutine(DelayAppearLV1Enemy(false));
                 }
             }
         }

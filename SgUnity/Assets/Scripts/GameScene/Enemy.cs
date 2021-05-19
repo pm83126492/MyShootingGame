@@ -6,17 +6,17 @@ public class Enemy : EnemyParent ,IPoolObject
 {
     int FireTime;
 
-    bool isMoveing;
+    public bool isMoveing;
 
     protected override void Start()
     {
         base.Start();
-        InvokeRepeating("EnemyFire", 1f, 0.1f);//EnemyShooting
+        //InvokeRepeating("EnemyFire", 1f, 0.1f);//EnemyShooting
     }
 
     public void OnObjectSpawn()
     {
-        InvokeRepeating("EnemyFire", 1f, 0.1f);//EnemyShooting
+        InvokeRepeating("EnemyFire", 1f, 0.3f);//EnemyShooting
         isMoveing = false;
         FireTime = 0;
     }
@@ -27,11 +27,11 @@ public class Enemy : EnemyParent ,IPoolObject
 
         if (isMoveing)
         {
-            Move(2);
+            Move(MoveSpeed);
         }
 
         //Stop Shooting
-        if (FireTime > 10)
+        if (FireTime > 8)
         {
             CancelInvoke("EnemyFire");
             StartCoroutine(ReloadFire());

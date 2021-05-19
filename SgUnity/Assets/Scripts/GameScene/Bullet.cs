@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if ((other.gameObject.CompareTag("Player") && isEnemy)|| (other.gameObject.CompareTag("Enemy") && !isEnemy)|| other.gameObject.CompareTag("BackGround"))
+        if ((other.gameObject.CompareTag("Player") && isEnemy)|| (other.gameObject.CompareTag("Enemy") && !isEnemy)|| other.gameObject.CompareTag("Bottom"))
         {
             gameObject.SetActive(false);
         }
