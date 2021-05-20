@@ -25,6 +25,7 @@ public class EnemyParent : MonoBehaviour
             PlayerController.Score += 1;
             isTurnToPlayer = false;
             gameObject.SetActive(false);
+            objectsPool.SpawnFromPool("ExplosionEffect", transform.position, transform.rotation);
             CancelInvoke("EnemyFire");
         }
 
@@ -45,5 +46,10 @@ public class EnemyParent : MonoBehaviour
     public virtual void Move(float moveSpeed)
     {
         transform.Translate(Vector3.up * Time.deltaTime * moveSpeed);
+    }
+
+    public virtual void InvokeShoot(string Name,float FirstTime,float ReplayTime)
+    {
+        InvokeRepeating("EnemyFire", FirstTime, ReplayTime);
     }
 }

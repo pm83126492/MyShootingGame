@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -8,10 +10,17 @@ public class GameController : MonoBehaviour
     public Transform[] EnemyPoint;
 
     public GameObject AddProtectingObject;
+    public GameObject GameOverPanel;
+    public GameObject WinPanel;
+
+    public PlayableDirector playableDirector;//TimeLine
+    public BossController bossController;
 
     bool isAppearing;
     bool isGetProtecting;
     public float GameTime;
+    public AudioSource BgmAudioSource;
+    public AudioClip BossBgm;
     public enum EnemyState
     {
         NONE,
@@ -26,8 +35,10 @@ public class GameController : MonoBehaviour
     public EnemyState enemyAppearState;
     void Start()
     {
+        Time.timeScale = 1;
         enemyAppearState = EnemyState.NONE;
         Invoke("StartGame", 1f);//StartGame in 3 seconds
+        BgmAudioSource = GameObject.Find("BGM").GetComponent<AudioSource>();
     }
 
     void Update()
@@ -37,6 +48,24 @@ public class GameController : MonoBehaviour
         GameTimeChangeLevel();//LevelChange 1~5
 
         ProtectingObject();//AppearProtectingObject
+
+        GameOverEvent();//Game Over Event
+    }
+
+    void GameOverEvent()
+    {
+        if (PlayerController.CurrentHP == 0)
+        {
+            Time.timeScale = 0;
+            GameOverPanel.SetActive(true);
+            BgmAudioSource.Pause();
+        }
+        else if (BossController.BossHP == 0)
+        {
+            Time.timeScale = 0;
+            WinPanel.SetActive(true);
+            BgmAudioSource.Pause();
+        }
     }
 
     //SpawnEnemy
@@ -89,7 +118,20 @@ public class GameController : MonoBehaviour
                     isAppearing = true;
                 }
                 break;
-
+            case EnemyState.BOSS:
+                BgmAudioSource.clip = BossBgm;
+                BgmAudioSource.Play();
+                PlayerController.IsStopShoot = true;
+                playableDirector.enabled=true;
+                if (float.Parse(playableDirector.time.ToString("0.0")) == 6f)
+                {
+                    enemyAppearState = EnemyState.NONE;
+                    bossController.attackState = BossController.AttackState.SECTORATTACK;
+                    PlayerController.IsStopShoot = false;
+                    bossController.isBeginBoss = true;
+                    playableDirector.Pause();
+                }
+                break;
         }
     }
 
@@ -122,6 +164,15 @@ public class GameController : MonoBehaviour
             ChangeLevel();
             enemyAppearState = EnemyState.LV5;
         }
+        else if (Mathf.Floor(GameTime) == 100)
+        {
+            ChangeLevel();
+            enemyAppearState = EnemyState.NONE;
+        }
+        else if (Mathf.Floor(GameTime) == 105)
+        {
+            enemyAppearState = EnemyState.BOSS;
+        }
     }
 
     void ChangeLevel()
@@ -138,22 +189,21 @@ public class GameController : MonoBehaviour
             Instantiate(AddProtectingObject, EnemyPoint[Random.Range(0, 5)].position, EnemyPoint[Random.Range(0, 5)].rotation);
             isGetProtecting = true;
         }
-        if (Mathf.Floor(GameTime) %2 != 0)
-        {
-            isGetProtecting = false;
-        }
-        
-        /*
-        if (PlayerController.Score % 50==0&& PlayerController.Score != 0&& !isGetProtecting)
-        {
-            Instantiate(AddProtectingObject, EnemyPoint[Random.Range(0, 5)].position, EnemyPoint[Random.Range(0, 5)].rotation);
-            isGetProtecting = true;
-        }
 
-        if (PlayerController.Score % 2 != 0)
+        if (Mathf.Floor(GameTime) %15 == 1)
         {
             isGetProtecting = false;
-        }*/
+        }
+    }
+
+    public void RePlayButton()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void RevivalButton()
+    {
+        SceneManager.LoadScene(0);
     }
 
     //EnemyDelayAppear

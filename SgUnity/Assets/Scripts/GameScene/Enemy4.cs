@@ -13,7 +13,7 @@ public class Enemy4 : EnemyParent , IPoolObject
 
     public void OnObjectSpawn()
     {
-        InvokeRepeating("EnemyFire", 0f, 0.1f);//EnemyShooting
+        InvokeShoot("EnemyFire", 0, 0.1f);//EnemyShooting
     }
 
     // Update is called once per frame

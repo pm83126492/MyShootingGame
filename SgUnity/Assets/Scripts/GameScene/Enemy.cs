@@ -16,7 +16,8 @@ public class Enemy : EnemyParent ,IPoolObject
 
     public void OnObjectSpawn()
     {
-        InvokeRepeating("EnemyFire", 1f, 0.3f);//EnemyShooting
+        InvokeShoot("EnemyFire", 1, 0.3f);
+        //InvokeRepeating("EnemyFire", 1f, 0.3f);//EnemyShooting
         isMoveing = false;
         FireTime = 0;
     }
@@ -73,6 +74,6 @@ public class Enemy : EnemyParent ,IPoolObject
     {
         yield return new WaitForSeconds(1f);
         isMoveing = false;
-        InvokeRepeating("EnemyFire", 0f, 0.1f);
+        InvokeShoot("EnemyFire", 1, 0.3f);
     }
 }

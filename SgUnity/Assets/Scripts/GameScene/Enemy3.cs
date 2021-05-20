@@ -12,7 +12,7 @@ public class Enemy3 : EnemyParent , IPoolObject
 
     public void OnObjectSpawn()
     {
-        InvokeRepeating("EnemyFire", 1f, 2f);//EnemyShooting
+        InvokeShoot("EnemyFire", 1, 2); ;//EnemyShooting
     }
 
     private void Update()

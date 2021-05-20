@@ -133,6 +133,7 @@ MonoBehaviour:
   MoveSpeed: -1
   target: {fileID: 0}
   isTurnToPlayer: 0
+  BombAudio: {fileID: 8300000, guid: 609b250b21d85504e82f018017d05587, type: 3}
   RSpeed: -0.7
 --- !u!61 &5458478692253647746
 BoxCollider2D:
@@ -144,7 +145,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

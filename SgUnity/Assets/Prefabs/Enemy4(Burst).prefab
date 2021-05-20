@@ -103,6 +103,8 @@ MonoBehaviour:
   MoveSpeed: 4
   target: {fileID: 0}
   isTurnToPlayer: 0
+  ShootAudio: {fileID: 0}
+  BombAudio: {fileID: 8300000, guid: 609b250b21d85504e82f018017d05587, type: 3}
 --- !u!61 &6116629789214896988
 BoxCollider2D:
   m_ObjectHideFlags: 0

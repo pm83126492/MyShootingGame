@@ -129,6 +129,8 @@ MonoBehaviour:
   MoveSpeed: 1.5
   target: {fileID: 0}
   isTurnToPlayer: 0
+  ShootAudio: {fileID: 0}
+  BombAudio: {fileID: 8300000, guid: 609b250b21d85504e82f018017d05587, type: 3}
 --- !u!50 &8516843457618500528
 Rigidbody2D:
   serializedVersion: 4

@@ -14,16 +14,22 @@ public class PlayerController : MonoBehaviour
 
     bool CanNextFire;//NextFire Is OK?
     bool isProtecting;//isProtecting?
+    public static bool IsStopShoot;
 
     public float PlayerMoveSpeed;
-    public int CurrentHP;//PlayerHP
+    public static int CurrentHP;//PlayerHP
     public int ProtectingAmount;//PlayerCanProtectingAmount
     public static int Score;//PlayerScore
 
+    AudioSource audioSource;
+    public AudioClip ProtectAudio;
     void Start()
     {
+        Score = 0;
         CurrentHP = 100;
         ProtectingMask = transform.GetChild(1).gameObject;
+        IsStopShoot = false;
+        audioSource = GetComponent<AudioSource>();
         //FirePoint = GetComponentInChildren<Transform>();
     }
 
@@ -31,17 +37,15 @@ public class PlayerController : MonoBehaviour
     {
         //PlayerMove
         MovePosition();
-
-        //Shooting
-        if ((Input.GetMouseButton(0)|| Input.GetKey(KeyCode.Space)) && !CanNextFire)
+        if (!CanNextFire&&!IsStopShoot)
         {
             Fire();
             CanNextFire = true;
             StartCoroutine(FireTime());
         }
 
+        //ProtectingEvent
         Protecting();
-
         //PlayerAddScore
         ScoreText.text = "Score:" + Score;
         //PlayerProtectingAmount
@@ -128,14 +132,16 @@ public class PlayerController : MonoBehaviour
 
     void Protecting() //ProtectingEvent
     {
-        if(Input.GetKeyDown(KeyCode.Q)&&ProtectingAmount>0&& !isProtecting)
+        if(Input.GetKeyDown(KeyCode.Space)&&ProtectingAmount>0&& !isProtecting)
         {
+            audioSource.PlayOneShot(ProtectAudio, 0.3f);
             isProtecting = true;
             ProtectingMask.SetActive(true);
             ProtectingAmount -= 1;
             StartCoroutine(ProtectingCoolingTime());
         }
     }
+
 
     //FireTimeReciprocal
     IEnumerator FireTime()

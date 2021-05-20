@@ -8,12 +8,12 @@ public class Enemy5 : EnemyParent ,IPoolObject
     protected override void Start()
     {
         base.Start();
-        //InvokeRepeating("EnemyFire", 0f, 0.2f);//EnemyShooting
+        InvokeRepeating("EnemyFire", 0f, 0.2f);//EnemyShooting
     }
 
     public void OnObjectSpawn()
     {
-        InvokeRepeating("EnemyFire", 0f, 0.2f);//EnemyShooting
+        InvokeShoot("EnemyFire", 0, 0.2f); ;//EnemyShooting
     }
 
     void Update()
@@ -37,16 +37,16 @@ public class Enemy5 : EnemyParent ,IPoolObject
             switch (j)
             {
                 case 0:
-                    Shoot("SectorBullet", FirePoint[1].position, leftQuaternoin1);
-                    Shoot("SectorBullet",FirePoint[0].position, leftQuaternoin2);
+                    Shoot("SpinBullet", FirePoint[1].position, leftQuaternoin1);
+                    Shoot("SpinBullet", FirePoint[0].position, leftQuaternoin2);
                     break;
                 case 1:
-                    Shoot("SectorBullet",FirePoint[1].position, rightQuaternoin1);
-                    Shoot("SectorBullet",FirePoint[0].position, rightQuaternoin2);
+                    Shoot("SpinBullet", FirePoint[1].position, rightQuaternoin1);
+                    Shoot("SpinBullet", FirePoint[0].position, rightQuaternoin2);
                     break;
                 case 2:
-                    Shoot("SectorBullet", FirePoint[1].position, zeroQuaternoin);
-                    Shoot("SectorBullet",FirePoint[0].position, zeroQuaternoin2);
+                    Shoot("SpinBullet", FirePoint[1].position, zeroQuaternoin);
+                    Shoot("SpinBullet", FirePoint[0].position, zeroQuaternoin2);
                     break;
             }
         }
