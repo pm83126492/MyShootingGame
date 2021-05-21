@@ -8,6 +8,7 @@ public class BossController : MonoBehaviour
 {
     public Slider BossHPSlider;
     public ObjectsPool objectsPool;
+
     public static float BossHP;
     public int MoveSpeed;
     float DistanceBossToNextPoint;//Boss to NextPoint Distance
@@ -21,7 +22,8 @@ public class BossController : MonoBehaviour
     public Transform[] MovePoint;
     public Transform[] FirePoint;
     public Transform[] TicPoint;
-    public GameObject target;
+    public GameObject target;//Fire Point Rotate Player
+    public GameObject DieEffect;//Boss Die Effect
     public enum AttackState
     {
         NONE,
@@ -51,8 +53,59 @@ public class BossController : MonoBehaviour
         FirePointRotateToPlayer();//Fire Point Rotate to Player
 
         AttackChangeEvent();//Change Attack Event
+
+        BossDieEvent();//Boss Is Die
     }
 
+    void BossMove()
+    {
+        //Boss Change Next Point And Move to Point
+        if (isBeginBoss)
+        {
+            if (DistanceBossToNextPoint == 0)
+            {
+                RandomNextPoint = Random.Range(0, 6);
+            }
+            DistanceBossToNextPoint = Vector3.Distance(transform.position, MovePoint[RandomNextPoint].position);
+            transform.position = Vector3.MoveTowards(transform.position, MovePoint[RandomNextPoint].position, MoveSpeed * Time.deltaTime);
+        }
+    }
+
+    void AttackLevel()
+    {
+        switch (attackState)
+        {
+            case AttackState.CIRCLEATTACK:
+                StartCoroutine(AddCircleAttack());
+                AttackReloadEvent();
+                break;
+            case AttackState.SPIRALATTACK:
+                StartCoroutine(AddSpiralAttack());
+                AttackReloadEvent();
+                break;
+            case AttackState.SECTORATTACK:
+                StartCoroutine(AddSectorAttack());
+                AttackReloadEvent();
+                break;
+            case AttackState.TICTACTOEATTACK:
+                StartCoroutine(AddTicTacToeAttack());
+                AttackReloadEvent();
+                break;
+        }
+    }
+
+    void AttackReloadEvent()
+    {
+        RandomAttack = 0;
+        attackState = AttackState.NONE;
+    }
+
+    void FirePointRotateToPlayer()
+    {
+        Vector3 PlayerAndEnemyDifference = target.transform.position - transform.position;
+        float rotationZ = Mathf.Atan2(PlayerAndEnemyDifference.y, PlayerAndEnemyDifference.x) * Mathf.Rad2Deg;
+        FirePoint[1].transform.rotation = FirePoint[2].transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationZ - 90);
+    }
 
     void AttackChangeEvent()
     {
@@ -61,13 +114,13 @@ public class BossController : MonoBehaviour
             BossTime += Time.deltaTime;
         }
 
-        //Change Attack 
-        if (Mathf.Floor(BossTime)%8==0&& Mathf.Floor(BossTime) != 0)
+        //Change Attack in 5 Seconds
+        if (Mathf.Floor(BossTime) % 5 == 0 && Mathf.Floor(BossTime) != 0)
         {
             RandomAttack = Random.Range(1, 5);
             StopAllCoroutines();
         }
-        else if (Mathf.Floor(BossTime) % 8 == 1)
+        else if (Mathf.Floor(BossTime) % 5 == 1)
         {
             isAttack = false;
         }
@@ -95,17 +148,13 @@ public class BossController : MonoBehaviour
         }
     }
 
-    void BossMove()
+    void BossDieEvent()
     {
-        //Boss Change Next Point And Move to Point
-        if (isBeginBoss)
+        if (BossHP <= 0)
         {
-            if (DistanceBossToNextPoint == 0)
-            {
-                RandomNextPoint = Random.Range(0, 6);
-            }
-            DistanceBossToNextPoint = Vector3.Distance(transform.position, MovePoint[RandomNextPoint].position);
-            transform.position = Vector3.MoveTowards(transform.position, MovePoint[RandomNextPoint].position, MoveSpeed * Time.deltaTime);
+            PlayerController.IsStopShoot = true;
+            isBeginBoss = false;
+            DieEffect.SetActive(true);
         }
     }
 
@@ -118,40 +167,6 @@ public class BossController : MonoBehaviour
             {
                 BossHP = 0;
             }
-        }
-    }
-
-    void FirePointRotateToPlayer()
-    {
-        Vector3 PlayerAndEnemyDifference = target.transform.position - transform.position;
-        float rotationZ = Mathf.Atan2(PlayerAndEnemyDifference.y, PlayerAndEnemyDifference.x) * Mathf.Rad2Deg;
-        FirePoint[1].transform.rotation = FirePoint[2].transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationZ - 90);
-    }
-
-    void AttackLevel()
-    {
-        switch (attackState)
-        {
-            case AttackState.CIRCLEATTACK:
-                StartCoroutine(AddCircleAttack());
-                RandomAttack = 0;
-                attackState = AttackState.NONE;
-                break;
-            case AttackState.SPIRALATTACK:
-                StartCoroutine(AddSpiralAttack());
-                RandomAttack = 0;
-                attackState = AttackState.NONE;
-                break;
-            case AttackState.SECTORATTACK:
-                StartCoroutine(AddSectorAttack());
-                RandomAttack = 0;
-                attackState = AttackState.NONE;
-                break;
-            case AttackState.TICTACTOEATTACK:
-                StartCoroutine(AddTicTacToeAttack());
-                RandomAttack = 0;
-                attackState = AttackState.NONE;
-                break;
         }
     }
 
@@ -209,7 +224,7 @@ public class BossController : MonoBehaviour
     //SectorAttack
     IEnumerator AddSectorAttack()
     {
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 25; i++)
         {
             for (int j = 0; j < 5; j++)
             {
@@ -219,23 +234,31 @@ public class BossController : MonoBehaviour
                 Quaternion zeroQuaternoin2 = Quaternion.AngleAxis(FirePoint[2].localEulerAngles.z, Vector3.forward);
                 Quaternion leftQuaternoin2 = Quaternion.AngleAxis(FirePoint[2].localEulerAngles.z + 15, Vector3.forward);
                 Quaternion rightQuaternoin2 = Quaternion.AngleAxis(FirePoint[2].localEulerAngles.z - 15, Vector3.forward);
+                Quaternion leftQuaternoin3 = Quaternion.AngleAxis(FirePoint[1].localEulerAngles.z + 30, Vector3.forward);
+                Quaternion rightQuaternoin3 = Quaternion.AngleAxis(FirePoint[1].localEulerAngles.z - 30, Vector3.forward);
+                Quaternion leftQuaternoin4 = Quaternion.AngleAxis(FirePoint[2].localEulerAngles.z + 30, Vector3.forward);
+                Quaternion rightQuaternoin4 = Quaternion.AngleAxis(FirePoint[2].localEulerAngles.z - 30, Vector3.forward);
                 switch (j)
                 {
                     case 0:
-                        objectsPool.SpawnFromPool("SpinBullet", FirePoint[1].transform.position, leftQuaternoin1);
-                        objectsPool.SpawnFromPool("SpinBullet", FirePoint[2].transform.position, leftQuaternoin2);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[1].transform.position, leftQuaternoin1);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[2].transform.position, leftQuaternoin2);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[2].transform.position, leftQuaternoin3);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[2].transform.position, leftQuaternoin4);
                         break;
                     case 1:
-                        objectsPool.SpawnFromPool("SpinBullet", FirePoint[1].transform.position, rightQuaternoin1);
-                        objectsPool.SpawnFromPool("SpinBullet", FirePoint[2].transform.position, rightQuaternoin2);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[1].transform.position, rightQuaternoin1);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[2].transform.position, rightQuaternoin2);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[1].transform.position, rightQuaternoin3);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[2].transform.position, rightQuaternoin4);
                         break;
                     case 2:
-                        objectsPool.SpawnFromPool("SpinBullet", FirePoint[1].transform.position, zeroQuaternoin);
-                        objectsPool.SpawnFromPool("SpinBullet", FirePoint[2].transform.position, zeroQuaternoin2);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[1].transform.position, zeroQuaternoin);
+                        objectsPool.SpawnFromPool("BossSpinBullet", FirePoint[2].transform.position, zeroQuaternoin2);
                         break;
                 }
             }
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 

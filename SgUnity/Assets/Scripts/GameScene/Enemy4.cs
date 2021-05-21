@@ -16,7 +16,6 @@ public class Enemy4 : EnemyParent , IPoolObject
         InvokeShoot("EnemyFire", 0, 0.1f);//EnemyShooting
     }
 
-    // Update is called once per frame
     void Update()
     {
         Move(MoveSpeed);

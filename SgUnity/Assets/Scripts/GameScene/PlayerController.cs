@@ -11,32 +11,39 @@ public class PlayerController : MonoBehaviour
     public Text ScoreText;
     public Text ProtectText;
     public GameObject ProtectingMask;
+    public CameraShake cameraShake;
 
     bool CanNextFire;//NextFire Is OK?
-    bool isProtecting;//isProtecting?
-    public static bool IsStopShoot;
+    bool isProtecting;//Is Protecting?
+    public static bool IsStopShoot;//Is Stop Shooting?
+    public static bool IsAddShootLine;//Is Add Shooting Line? (1~5)
 
     public float PlayerMoveSpeed;
-    public static int CurrentHP;//PlayerHP
+    public static float CurrentHP;//PlayerHP
     public int ProtectingAmount;//PlayerCanProtectingAmount
     public static int Score;//PlayerScore
+    int ShootLineAmount;//Shoot Line Amount (1~5)
 
     AudioSource audioSource;
     public AudioClip ProtectAudio;
+    public AudioClip GetProtectAudio;
     void Start()
     {
+        IsAddShootLine = false;
+        ShootLineAmount = 1;
         Score = 0;
         CurrentHP = 100;
         ProtectingMask = transform.GetChild(1).gameObject;
         IsStopShoot = false;
         audioSource = GetComponent<AudioSource>();
-        //FirePoint = GetComponentInChildren<Transform>();
     }
 
     void Update()
     {
-        //PlayerMove
-        MovePosition();
+        HPSilder.value = CurrentHP;
+
+        MovePosition();//PlayerMove
+
         if (!CanNextFire&&!IsStopShoot)
         {
             Fire();
@@ -44,33 +51,32 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(FireTime());
         }
 
-        //ProtectingEvent
-        Protecting();
-        //PlayerAddScore
-        ScoreText.text = "Score:" + Score;
-        //PlayerProtectingAmount
-        ProtectText.text = "X " + ProtectingAmount;
+        Protecting();//ProtectingEvent
+
+        ScoreText.text = "Score:" + Score;//PlayerAddScore
+
+        ProtectText.text = "X " + ProtectingAmount;//PlayerProtectingAmount
     }
 
     //PlayerMove
     void MovePosition()
     {
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow))
         {
             transform.Translate(Vector3.up * Time.deltaTime * PlayerMoveSpeed);
         }
 
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
             transform.Translate(Vector3.down * Time.deltaTime * PlayerMoveSpeed);
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             transform.Translate(Vector3.left * Time.deltaTime * PlayerMoveSpeed);
         }
 
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             transform.Translate(Vector3.right * Time.deltaTime * PlayerMoveSpeed);
         }
@@ -79,35 +85,19 @@ public class PlayerController : MonoBehaviour
     //Shooting
     void Fire()
     {
-        if (Score < 100)
+        if (IsAddShootLine)
         {
-            ShootLevel(1);
+            objectPool.SpawnFromPool("LevelUpEffect", transform.position, transform.rotation);
+            objectPool.SpawnFromPool("LevelUpEffect", transform.position, transform.rotation).transform.parent=transform;
+            ShootLineAmount += 1;
+            IsAddShootLine = false;
         }
-        else if (Score>=100&&Score < 200)
-        {
-            ShootLevel(2);
-        }
-        else if (Score >= 200 && Score < 300)
-        {
-            ShootLevel(3);
-        }
-        else if (Score >= 300 && Score <400)
-        {
-            ShootLevel(4);
-        }
-        else if (Score >= 400)
-        {
-            ShootLevel(5);
-        }
-    }
 
-    void ShootLevel(int ShootNumber)
-    {
         Quaternion leftQuaternoin1 = Quaternion.AngleAxis(4, Vector3.forward);
         Quaternion rightQuaternoin1 = Quaternion.AngleAxis(-4, Vector3.forward);
         Quaternion leftQuaternoin2 = Quaternion.AngleAxis(8, Vector3.forward);
         Quaternion rightQuaternoin2 = Quaternion.AngleAxis(-8, Vector3.forward);
-        for (int j = 0; j < ShootNumber; j++)
+        for (int j = 0; j < ShootLineAmount; j++)
         {
             switch (j)
             {
@@ -134,7 +124,7 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space)&&ProtectingAmount>0&& !isProtecting)
         {
-            audioSource.PlayOneShot(ProtectAudio, 0.3f);
+            audioSource.PlayOneShot(ProtectAudio, 0.5f);
             isProtecting = true;
             ProtectingMask.SetActive(true);
             ProtectingAmount -= 1;
@@ -143,13 +133,14 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //FireTimeReciprocal
+    //Player Fire Time Reciprocal
     IEnumerator FireTime()
     {
         yield return new WaitForSeconds(0.1f);
         CanNextFire = false;
     }
 
+    //Player Protecting Cooling Time
     IEnumerator ProtectingCoolingTime()
     {
         yield return new WaitForSeconds(3f);
@@ -165,19 +156,22 @@ public class PlayerController : MonoBehaviour
         {
             CurrentHP = 0;
         }
-        HPSilder.value = CurrentHP;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("EnemyBullet")&&!isProtecting)
         {
+            other.gameObject.SetActive(false);
+            objectPool.SpawnFromPool("DamageEffect", transform.position, transform.rotation);
+            cameraShake.ShakeTime = 0.1f;
             TakeDamage(1);
         }
 
         if (other.gameObject.CompareTag("ProtectingObject"))
         {
             ProtectingAmount += 1;
+            audioSource.PlayOneShot(GetProtectAudio, 0.3f);
             Destroy(other.gameObject);
         }
     }

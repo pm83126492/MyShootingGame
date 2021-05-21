@@ -104,7 +104,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 12
   m_Sprite: {fileID: 21300000, guid: 915b4a35fbcd3ff40a8705bfc7569afd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -134,8 +134,6 @@ MonoBehaviour:
   MoveSpeed: 2
   target: {fileID: 0}
   isTurnToPlayer: 0
-  ShootAudio: {fileID: 8300000, guid: d82d9b27143b36b42893724a0b0bbc38, type: 3}
-  BombAudio: {fileID: 8300000, guid: 609b250b21d85504e82f018017d05587, type: 3}
   isMoveing: 0
 --- !u!61 &8889816101787772207
 BoxCollider2D:

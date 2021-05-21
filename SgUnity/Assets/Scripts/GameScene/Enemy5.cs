@@ -8,7 +8,7 @@ public class Enemy5 : EnemyParent ,IPoolObject
     protected override void Start()
     {
         base.Start();
-        InvokeRepeating("EnemyFire", 0f, 0.2f);//EnemyShooting
+        //InvokeRepeating("EnemyFire", 0f, 0.2f);//EnemyShooting
     }
 
     public void OnObjectSpawn()
@@ -20,7 +20,6 @@ public class Enemy5 : EnemyParent ,IPoolObject
     {
         transform.Rotate(new Vector3(0f, 0f, RSpeed));
         transform.position += new Vector3(0f, MoveSpeed * Time.deltaTime, 0f);
-        //Move(MoveSpeed);
     }
 
     //SpinShooting

@@ -7,8 +7,10 @@ public class EnemyParent : MonoBehaviour
 {
     public ObjectsPool objectsPool;
     public Transform[] FirePoint;
+    public GameObject target;//Rotate to Player
+
     public float MoveSpeed;
-    public GameObject target;
+
     public bool isTurnToPlayer;
     // Start is called before the first frame update
     protected virtual void Start()
@@ -23,6 +25,10 @@ public class EnemyParent : MonoBehaviour
         if (other.gameObject.CompareTag("Bullet"))
         {
             PlayerController.Score += 1;
+            if (PlayerController.Score % 100 == 0 && PlayerController.Score<500)
+            {
+                PlayerController.IsAddShootLine = true;
+            }
             isTurnToPlayer = false;
             gameObject.SetActive(false);
             objectsPool.SpawnFromPool("ExplosionEffect", transform.position, transform.rotation);

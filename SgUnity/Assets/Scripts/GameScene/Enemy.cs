@@ -11,13 +11,12 @@ public class Enemy : EnemyParent ,IPoolObject
     protected override void Start()
     {
         base.Start();
-        //InvokeRepeating("EnemyFire", 1f, 0.1f);//EnemyShooting
+        //InvokeRepeating("EnemyFire", 1f, 0.3f);//EnemyShooting
     }
 
     public void OnObjectSpawn()
     {
         InvokeShoot("EnemyFire", 1, 0.3f);
-        //InvokeRepeating("EnemyFire", 1f, 0.3f);//EnemyShooting
         isMoveing = false;
         FireTime = 0;
     }
@@ -74,6 +73,6 @@ public class Enemy : EnemyParent ,IPoolObject
     {
         yield return new WaitForSeconds(1f);
         isMoveing = false;
-        InvokeShoot("EnemyFire", 1, 0.3f);
+        InvokeShoot("EnemyFire", 0, 0.3f);
     }
 }

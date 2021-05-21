@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     public GameObject AddProtectingObject;
     public GameObject GameOverPanel;
     public GameObject WinPanel;
+    public GameObject BulletObject;
 
     public PlayableDirector playableDirector;//TimeLine
     public BossController bossController;
@@ -62,10 +63,16 @@ public class GameController : MonoBehaviour
         }
         else if (BossController.BossHP == 0)
         {
-            Time.timeScale = 0;
-            WinPanel.SetActive(true);
-            BgmAudioSource.Pause();
+            BulletObject.SetActive(false);
+            Invoke("WinGame", 3.1f);
         }
+    }
+
+    void WinGame()
+    {
+        Time.timeScale = 0;
+        WinPanel.SetActive(true);
+        BgmAudioSource.Pause();
     }
 
     //SpawnEnemy
@@ -121,13 +128,17 @@ public class GameController : MonoBehaviour
             case EnemyState.BOSS:
                 BgmAudioSource.clip = BossBgm;
                 BgmAudioSource.Play();
-                PlayerController.IsStopShoot = true;
+                //PlayerController.IsStopShoot = true;
                 playableDirector.enabled=true;
+                if (PlayerController.CurrentHP <= 100)
+                {
+                    PlayerController.CurrentHP += 0.1f;
+                }
                 if (float.Parse(playableDirector.time.ToString("0.0")) == 6f)
                 {
                     enemyAppearState = EnemyState.NONE;
                     bossController.attackState = BossController.AttackState.SECTORATTACK;
-                    PlayerController.IsStopShoot = false;
+                    //PlayerController.IsStopShoot = false;
                     bossController.isBeginBoss = true;
                     playableDirector.Pause();
                 }
@@ -184,13 +195,13 @@ public class GameController : MonoBehaviour
     //AppearProtectingObject
     void ProtectingObject()
     {
-        if(Mathf.Floor(GameTime) % 15 == 0&& Mathf.Floor(GameTime) !=0&& !isGetProtecting)
+        if(Mathf.Floor(GameTime) % 10 == 0&& Mathf.Floor(GameTime) !=0&& !isGetProtecting)
         {
             Instantiate(AddProtectingObject, EnemyPoint[Random.Range(0, 5)].position, EnemyPoint[Random.Range(0, 5)].rotation);
             isGetProtecting = true;
         }
 
-        if (Mathf.Floor(GameTime) %15 == 1)
+        if (Mathf.Floor(GameTime) %10 == 1)
         {
             isGetProtecting = false;
         }

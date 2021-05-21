@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 12
+  m_SortingOrder: 14
   m_Sprite: {fileID: 21300000, guid: 591ba79802e9d2643aade7aef44968e0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -129,8 +129,6 @@ MonoBehaviour:
   MoveSpeed: 1.5
   target: {fileID: 0}
   isTurnToPlayer: 0
-  ShootAudio: {fileID: 0}
-  BombAudio: {fileID: 8300000, guid: 609b250b21d85504e82f018017d05587, type: 3}
 --- !u!50 &8516843457618500528
 Rigidbody2D:
   serializedVersion: 4

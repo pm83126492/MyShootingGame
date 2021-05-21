@@ -23,7 +23,6 @@ public class Enemy3 : EnemyParent , IPoolObject
     //CircleShooting
     void EnemyFire()
     {
-        Vector3 fireDirection = transform.up;
         float rotationAngle=0;
         for (int j = 0; j < 30; j++)
         {
