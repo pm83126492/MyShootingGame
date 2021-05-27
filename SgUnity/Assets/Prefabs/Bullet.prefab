@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletSpeed: 10
   isEnemy: 0
+  FireAudio: {fileID: 0}
 --- !u!58 &-9168894200750599121
 CircleCollider2D:
   m_ObjectHideFlags: 0

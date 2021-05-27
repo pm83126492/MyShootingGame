@@ -8,7 +8,7 @@ public class Enemy5 : EnemyParent ,IPoolObject
     protected override void Start()
     {
         base.Start();
-        //InvokeRepeating("EnemyFire", 0f, 0.2f);//EnemyShooting
+        InvokeRepeating("EnemyFire", 0f, 0.2f);//EnemyShooting
     }
 
     public void OnObjectSpawn()
@@ -25,6 +25,7 @@ public class Enemy5 : EnemyParent ,IPoolObject
     //SpinShooting
     void EnemyFire()
     {
+        ShootAudio.Play();
         for (int j = 0; j < 5; j++)
         {
             Quaternion zeroQuaternoin = Quaternion.AngleAxis(transform.localEulerAngles.z, Vector3.forward);

@@ -12,6 +12,8 @@ public class EnemyParent : MonoBehaviour
     public float MoveSpeed;
 
     public bool isTurnToPlayer;
+
+    public AudioSource ShootAudio;
     // Start is called before the first frame update
     protected virtual void Start()
     {

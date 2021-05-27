@@ -41,6 +41,7 @@ public class Enemy2 : EnemyParent , IPoolObject
 
         for (int j = 0; j < 5; j++)
         {
+            ShootAudio.Play();
             switch (j)
             {
                 case 0:

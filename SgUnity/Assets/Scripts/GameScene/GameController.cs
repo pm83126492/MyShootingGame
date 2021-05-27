@@ -132,7 +132,7 @@ public class GameController : MonoBehaviour
                 playableDirector.enabled=true;
                 if (PlayerController.CurrentHP <= 100)
                 {
-                    PlayerController.CurrentHP += 0.1f;
+                    PlayerController.CurrentHP += 0.3f;
                 }
                 if (float.Parse(playableDirector.time.ToString("0.0")) == 6f)
                 {
@@ -195,13 +195,13 @@ public class GameController : MonoBehaviour
     //AppearProtectingObject
     void ProtectingObject()
     {
-        if(Mathf.Floor(GameTime) % 10 == 0&& Mathf.Floor(GameTime) !=0&& !isGetProtecting)
+        if(Mathf.Floor(GameTime) % 20 == 0&& Mathf.Floor(GameTime) !=0&& !isGetProtecting)
         {
             Instantiate(AddProtectingObject, EnemyPoint[Random.Range(0, 5)].position, EnemyPoint[Random.Range(0, 5)].rotation);
             isGetProtecting = true;
         }
 
-        if (Mathf.Floor(GameTime) %10 == 1)
+        if (Mathf.Floor(GameTime) %20 == 1)
         {
             isGetProtecting = false;
         }

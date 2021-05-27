@@ -131,9 +131,10 @@ MonoBehaviour:
   objectsPool: {fileID: 0}
   FirePoint:
   - {fileID: 0}
-  MoveSpeed: 2
   target: {fileID: 0}
+  MoveSpeed: 2
   isTurnToPlayer: 0
+  ShootAudio: {fileID: 0}
   isMoveing: 0
 --- !u!61 &8889816101787772207
 BoxCollider2D:

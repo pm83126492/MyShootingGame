@@ -24,6 +24,8 @@ public class BossController : MonoBehaviour
     public Transform[] TicPoint;
     public GameObject target;//Fire Point Rotate Player
     public GameObject DieEffect;//Boss Die Effect
+    AudioSource BossAudio;
+    public AudioClip[] ShootAudio;
     public enum AttackState
     {
         NONE,
@@ -37,6 +39,7 @@ public class BossController : MonoBehaviour
 
     void Start()
     {
+        BossAudio = GetComponent<AudioSource>();
         BossHP = 1000;
         FirePoint = GetComponentsInChildren<Transform>();
         FirePoint = GetComponentsInChildren<Transform>().Where(item => item != this.transform).ToArray();
@@ -76,14 +79,17 @@ public class BossController : MonoBehaviour
         switch (attackState)
         {
             case AttackState.CIRCLEATTACK:
+                BossAudio.PlayOneShot(ShootAudio[1]);
                 StartCoroutine(AddCircleAttack());
                 AttackReloadEvent();
                 break;
             case AttackState.SPIRALATTACK:
+                BossAudio.PlayOneShot(ShootAudio[2]);
                 StartCoroutine(AddSpiralAttack());
                 AttackReloadEvent();
                 break;
             case AttackState.SECTORATTACK:
+                BossAudio.PlayOneShot(ShootAudio[0]);
                 StartCoroutine(AddSectorAttack());
                 AttackReloadEvent();
                 break;
@@ -115,12 +121,12 @@ public class BossController : MonoBehaviour
         }
 
         //Change Attack in 5 Seconds
-        if (Mathf.Floor(BossTime) % 5 == 0 && Mathf.Floor(BossTime) != 0)
+        if (Mathf.Floor(BossTime) % 7 == 0 && Mathf.Floor(BossTime) != 0)
         {
             RandomAttack = Random.Range(1, 5);
             StopAllCoroutines();
         }
-        else if (Mathf.Floor(BossTime) % 5 == 1)
+        else if (Mathf.Floor(BossTime) % 7 == 1)
         {
             isAttack = false;
         }
@@ -152,6 +158,7 @@ public class BossController : MonoBehaviour
     {
         if (BossHP <= 0)
         {
+            BossAudio.Stop();
             PlayerController.IsStopShoot = true;
             isBeginBoss = false;
             DieEffect.SetActive(true);
@@ -183,6 +190,10 @@ public class BossController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         for (int i = 0; i < bullets.Count; i++)
         {
+            if (i == 1)
+            {
+                BossAudio.PlayOneShot(ShootAudio[4]);
+            }
             StartCoroutine(CircleAttack(bullets[i].transform.position));
         }
     }
@@ -291,6 +302,7 @@ public class BossController : MonoBehaviour
             Vector3 firePoint = TicPoint[SpawnPoint].transform.position;
             for (int j = 0; j < 10; j++)
             {
+                BossAudio.PlayOneShot(ShootAudio[3]);
                 firePoint += fireDir;//spawn position
                 objectsPool.SpawnFromPool("TicBullet", firePoint, transform.rotation);
                 yield return new WaitForSeconds(0.1f);
